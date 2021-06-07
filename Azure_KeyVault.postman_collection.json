@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "2c528766-006a-4d61-b9b2-20fa9bac2405",
+		"name": "Azure_KeyVault",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var json = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"azureApp_bearerToken\", json.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "eb84e3d0-3a98-4ad3-acb5-454241edffc8",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "9FePzZlGb4BzdgpPhFmGdLL153sPLjkbR4VOnZBBrDk=",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "https://vault.azure.net/.default",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{$ADTenantId}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"6ac7a1f4-5fb1-4153-bb4f-12d2020a1f7d",
+						"oauth2",
+						"v2.0",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Key_Value_Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "\tBearer {{azureApp_bearerToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{$keyVaultURL}/secrets/{$key}?api-version=2016-10-01",
+					"protocol": "https",
+					"host": [
+						"buycsappsdev-kv1",
+						"vault",
+						"azure",
+						"net"
+					],
+					"path": [
+						"secrets",
+						"{$key}"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "2016-10-01"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
